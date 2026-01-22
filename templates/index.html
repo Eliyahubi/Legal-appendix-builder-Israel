@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בונה שערי נספחים - אליהו ביטון</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .info-box {
+            background: #f8f9ff;
+            border-right: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .info-box ol, .info-box ul {
+            margin-right: 20px;
+            line-height: 1.8;
+        }
+
+        .info-box li {
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        .upload-section {
+            background: #fff;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #764ba2;
+            background: #f8f9ff;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .file-input-label:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-name {
+            margin-top: 15px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .features {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .features h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .features ul {
+            list-style: none;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #444;
+        }
+
+        .features li:before {
+            content: "✓ ";
+            color: #667eea;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🗂️ בונה שערי נספחים</h1>
+        <div class="subtitle">אליהו ביטון</div>
+
+        <div class="info-box">
+            <h3>📋 איך זה עובד?</h3>
+            <ol>
+                <li><strong>העלה קובץ Word</strong> - העלה את כתב הטענות שלך (קובץ .docx)</li>
+                <li><strong>זיהוי אוטומטי</strong> - המערכת תזהה את כל הנספחים במסמך</li>
+                <li><strong>קבל 2 קבצים</strong>:
+                    <ul>
+                        <li>📊 <strong>טבלת נספחים</strong> - טבלה עם כל הנספחים ושמותיהם</li>
+                        <li>📄 <strong>שערי נספחים</strong> - עמוד נפרד לכל נספח (מוכן להדפסה)</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <div class="upload-section">
+                <div class="file-input-wrapper">
+                    <label class="file-input-label">
+                        📎 בחר קובץ Word
+                    </label>
+                    <input type="file" name="file" accept=".docx" required onchange="updateFileName(this)">
+                </div>
+                <div class="file-name" id="fileName">לא נבחר קובץ</div>
+            </div>
+
+            <button type="submit">🚀 צור שערי נספחים וטבלה</button>
+        </form>
+
+        <div class="features">
+            <h4>✨ מה המערכת מזהה?</h4>
+            <ul>
+                <li>נספח 1 - שם הנספח</li>
+                <li>נספח מספר 2 - שם הנספח</li>
+                <li>נספח מס' 3 - שם הנספח</li>
+                <li>ועוד דפוסים נוספים...</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function updateFileName(input) {
+            const fileNameDisplay = document.getElementById('fileName');
+            if (input.files && input.files[0]) {
+                fileNameDisplay.textContent = '📄 ' + input.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'לא נבחר קובץ';
+            }
+        }
+    </script>
+</body>
+</html>
