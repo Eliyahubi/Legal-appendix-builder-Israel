@@ -167,6 +167,50 @@ def create_appendices_covers(appendices):
     doc.save(output_path)
     return output_path
 
+def create_cover_page(appendices, output_path):
+    """יצירת דף שער נפרד לכל נספח — כל נספח בעמוד משלו"""
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+
+    doc = Document()
+
+    for section in doc.sections:
+        section.top_margin = Inches(2)
+        section.bottom_margin = Inches(2)
+        section.left_margin = Inches(1.2)
+        section.right_margin = Inches(1.2)
+
+    def add_centered_paragraph(text, font_size, bold=False, space_before=0, space_after=0):
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        pf = p.paragraph_format
+        pf.space_before = Pt(space_before)
+        pf.space_after = Pt(space_after)
+        run = p.add_run(text)
+        run.font.size = Pt(font_size)
+        run.font.bold = bold
+        run.font.name = 'David'
+        return p
+
+    for i, (num, desc) in enumerate(appendices):
+        if i > 0:
+            p_break = doc.add_paragraph()
+            run_break = p_break.add_run()
+            br = OxmlElement('w:br')
+            br.set(qn('w:type'), 'page')
+            run_break._element.append(br)
+
+        for _ in range(6):
+            doc.add_paragraph()
+
+        add_centered_paragraph(f'נספח {num}', font_size=32, bold=True, space_before=0, space_after=12)
+        add_centered_paragraph('─' * 40, font_size=12, bold=False, space_before=6, space_after=6)
+        add_centered_paragraph(desc, font_size=18, bold=False, space_before=12, space_after=0)
+
+    doc.save(output_path)
+    print(f'✓ נשמר: {output_path}')
+
+
 def create_zip_file(table_file, covers_file):
     """
     יוצר קובץ ZIP עם שני הקבצים
